@@ -17,7 +17,7 @@
 #### Getting Jenkins API Token
 If anonymous read is disabled but you have credentials, you can generate an API Key by navigating to:
 - `http://[jenkins]/user/admin/configure`
-- Under `API Token` click "Add New Token"
+- Under `API Token` click `Add New Token`
 
 ## Installation:
 
