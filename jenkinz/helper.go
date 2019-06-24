@@ -14,11 +14,15 @@ var (
 func Usage() {
 	help := `Usage: jenkinz -d https://<jenkins-instance> [options]
 
-  -c int
-		Number of concurrent fetchers (default 20)
-		
   -d string
 		url of jenkins instance		
+
+  -creds string
+		Credentials for Jenkins instance (format = username:apikey)
+	
+  -c int
+		Number of concurrent fetchers (default 20)
+
   -timeout int
 		Timeout for the tool in seconds (default 30)`
 	fmt.Printf(help)

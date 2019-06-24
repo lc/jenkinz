@@ -17,25 +17,30 @@ import (
 var (
 	timeout     int
 	concurrency int
+	credentials string
 	domain      string
 	jobs        []string
 )
 
 type Attack struct {
-	Domain string
-	Host   string
+	Domain      string
+	Host        string
+	Credentials string
 }
 
 func init() {
 	flag.Usage = jenkinz.Usage
 	flag.IntVar(&timeout, "timeout", 30, "Timeout for the tool in seconds")
 	flag.IntVar(&concurrency, "c", 5, "Number of concurrent fetchers")
+	flag.StringVar(&credentials, "creds", "", "Credentials for Jenkins instance (format = username:apikey)")
 	flag.StringVar(&domain, "d", "", "URL of Jenkins Instance")
 }
 
 func main() {
 	flag.Parse()
 	attck := new(Attack)
+	attck.Credentials = credentials
+	//"admin:11ed9c7f6177d8264dd35817cf96594f7f"
 	jenkinz.Jenkinz.Timeout = time.Duration(timeout) * time.Second
 	if len(domain) < 1 {
 		log.Fatalf("Usage: %s -d http://<jenkins>\n", os.Args[0])
@@ -84,10 +89,14 @@ func main() {
 	wg2.Wait()
 }
 func (a Attack) GetJobs() {
-	url := fmt.Sprintf("%s/api/json?tree=jobs[name,color]", a.Domain)
-	resp, err := jenkinz.Jenkinz.Get(url)
+	url := fmt.Sprintf("%s/api/json?tree=jobs[name]", a.Domain)
+	resp, err := jenkinz.Get(url, a.Credentials)
 	if err != nil {
 		log.Fatal(err)
+	}
+	if resp.StatusCode != 200 {
+		fmt.Printf("ERROR! %s returned %d. Are you sure your credentals are correct?\n", url, resp.StatusCode)
+		os.Exit(1)
 	}
 	x := new(jenkinz.Jobs)
 	err = json.NewDecoder(resp.Body).Decode(&x)
@@ -101,12 +110,13 @@ func (a Attack) GetJobs() {
 func (a Attack) GetBuilds(job string) []string {
 	var builds []string
 	url := fmt.Sprintf("%s/job/%s/api/json?tree=builds[id]", a.Domain, job)
-	resp, err := jenkinz.Jenkinz.Get(url)
+	resp, err := jenkinz.Get(url, a.Credentials)
 	if err != nil {
 		log.Fatal(err)
 	}
 	x := new(jenkinz.Builds)
 	err = json.NewDecoder(resp.Body).Decode(&x)
+	resp.Body.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -120,35 +130,42 @@ func (a Attack) SaveLogs(buildChan chan *jenkinz.Build, resultChan chan string) 
 	for build := range buildChan {
 		// get console output of Build.
 		url := fmt.Sprintf("%s/job/%s/%s/consoleText", a.Domain, build.Job, build.Id)
-		resp, err := jenkinz.Jenkinz.Get(url)
+		resp, err := jenkinz.Get(url, a.Credentials)
 		if err != nil {
 			log.Fatal(err)
 		}
-		r, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		file := fmt.Sprintf("output/%s/%s/%s.txt", a.Host, build.Job, build.Id)
-		err = ioutil.WriteFile(file, r, 0644)
-		if err != nil {
-			log.Fatalf("Error: %v", err)
+		if resp.StatusCode == 200 {
+			r, err := ioutil.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
+			file := fmt.Sprintf("output/%s/%s/%s.txt", a.Host, build.Job, build.Id)
+			err = ioutil.WriteFile(file, r, 0644)
+			if err != nil {
+				log.Fatalf("Error: %v", err)
+			}
 		}
 		// Get environment variables for build.
 		url = fmt.Sprintf("%s/job/%s/%s/injectedEnvVars/export/api/json", a.Domain, build.Job, build.Id)
-		resp, err = jenkinz.Jenkinz.Get(url)
+		resp, err = jenkinz.Get(url, a.Credentials)
 		if err != nil {
 			log.Fatal(err)
 		}
-		r, err = ioutil.ReadAll(resp.Body)
-		if err != nil {
-			log.Println(err)
-			return
+		if resp.StatusCode == 200 {
+
+			r, err := ioutil.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			file := fmt.Sprintf("output/%s/%s/%s_env.txt", a.Host, build.Job, build.Id)
+			err = ioutil.WriteFile(file, r, 0644)
+			if err != nil {
+				log.Printf("Error: %v", err)
+			}
 		}
-		file = fmt.Sprintf("output/%s/%s/%s_env.txt", a.Host, build.Job, build.Id)
-		err = ioutil.WriteFile(file, r, 0644)
-		if err != nil {
-			log.Printf("Error: %v", err)
-		}
-		resultChan <- fmt.Sprintf("Wrote log for build %s of %s", build.Id, build.Job)
+		resultChan <- fmt.Sprintf("Fetched logs & env variables for build %s of %s", build.Id, build.Job)
 	}
 }
