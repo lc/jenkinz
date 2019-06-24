@@ -10,8 +10,8 @@
 | Flag | Description | Example |
 |------|-------------|---------|
 | `-d` | url of jenkins instance | `jenkinz -d https://jenkins.example.com` |
-| `-c` | Limit the number of workers that are spawned | `jenkinz -d https://jenkins.example.com -c 200` |
-| `-timeout` | Timeout for the tool in seconds (default 30) | `jenkinz -d https://jenkins.example.com -timeout 10`|
+| `-c` | Limit the number of workers that are spawned | `jenkinz -d url -c 200` |
+| `-timeout` | Timeout for the tool in seconds (default 30) | `jenkinz -d url -timeout 10`|
 
 ## Installation:
 
