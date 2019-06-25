@@ -25,5 +25,5 @@ If anonymous read is disabled but you have credentials, you can generate an API 
 
 ```
 git clone git@github.com:lc/jenkinz
-cd jenkinz && go build -o jenkinz main.go
+cd jenkinz && go build -o $GOPATH/bin/jenkinz main.go
 ```
