@@ -14,7 +14,7 @@
 | `-c` | Limit the number of workers that are spawned | `jenkinz -d url -c 200` |
 | `-timeout` | Timeout for the tool in seconds (default 30) | `jenkinz -d url -timeout 10`|
 
-#### Getting Jenkins API Token
+#### Getting a Jenkins API Token
 If anonymous read is disabled but you have credentials, you can generate an API Key by navigating to:
 - `http://[jenkins]/user/admin/configure`
 - Under `API Token` click `Add New Token`
@@ -25,5 +25,5 @@ If anonymous read is disabled but you have credentials, you can generate an API 
 
 ```
 git clone git@github.com:lc/jenkinz
-cd jenkinz && go build -o jenkinz main.go
+cd jenkinz && go build -o $GOPATH/bin/jenkinz main.go
 ```
