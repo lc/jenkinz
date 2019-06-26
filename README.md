@@ -9,7 +9,7 @@
 ### Flags:
 | Flag | Description | Example |
 |------|-------------|---------|
-| `-d` | URL of jenkins instance | `jenkinz -d https://jenkins.example.com` |
+| `-d` | URL of Jenkins | `jenkinz -d https://jenkins.example.com` |
 | `-creds` | Credentials for Jenkins instance (format user:apikey) | `jenkinz -d url -creds "admin:c129e5db6b5e3abdff6eb9b0008ad7f2"` |
 | `-c` | Limit the number of workers that are spawned | `jenkinz -d url -c 200` |
 | `-timeout` | Timeout for the tool in seconds (default 30) | `jenkinz -d url -timeout 10`|
