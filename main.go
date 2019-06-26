@@ -40,7 +40,6 @@ func main() {
 	flag.Parse()
 	attck := new(Attack)
 	attck.Credentials = credentials
-	//"admin:11ed9c7f6177d8264dd35817cf96594f7f"
 	jenkinz.Jenkinz.Timeout = time.Duration(timeout) * time.Second
 	if len(domain) < 1 {
 		log.Fatalf("Usage: %s -d http://<jenkins>\n", os.Args[0])
