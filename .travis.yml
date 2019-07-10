@@ -8,5 +8,4 @@ go:
   - "1.12.x"
   - master
 
-script: make lint test
-
+script: go vet ./... 
