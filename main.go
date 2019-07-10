@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"./jenkinz"
+	"github.com/lc/jenkinz/jenkinz"
 )
 
 var (
