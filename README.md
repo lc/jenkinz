@@ -20,6 +20,10 @@ If anonymous read is disabled but you have credentials, you can generate an API 
 - Under `API Token` click `Add New Token`
 
 ## Installation:
+### Via `go get`
+```
+go get -u github.com/lc/jenkinz
+```
 
 ### Via `git clone`
 
