@@ -1,4 +1,7 @@
 # jenkinz
+[![License](https://img.shields.io/badge/license-MIT-_red.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.com/lc/jenkinz.svg?token=FswQDY1nX7ZGBFyUF3i7&branch=master)](https://travis-ci.com/lc/jenkinz)
+
 `jenkinz` is a tool to retrieve every build for every job ever created and run on a given Jenkins instance. 
 
 
