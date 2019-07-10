@@ -1,0 +1,20 @@
+Started by user admin
+Running as SYSTEM
+Building in workspace /var/jenkins_home/workspace/Test
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/lc/test
+ > git init /var/jenkins_home/workspace/Test # timeout=10
+Fetching upstream changes from https://github.com/lc/test
+ > git --version # timeout=10
+ > git fetch --tags --progress https://github.com/lc/test +refs/heads/*:refs/remotes/origin/*
+ > git config remote.origin.url https://github.com/lc/test # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/lc/test # timeout=10
+Fetching upstream changes from https://github.com/lc/test
+ > git fetch --tags --progress https://github.com/lc/test +refs/heads/*:refs/remotes/origin/*
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+ > git rev-parse origin/master^{commit} # timeout=10
+ERROR: Couldn't find any revision to build. Verify the repository and branch configuration for this job.
+Finished: FAILURE

@@ -15,6 +15,7 @@ import (
 )
 
 var (
+	numbuilds   = 0
 	timeout     int
 	concurrency int
 	credentials string
@@ -38,12 +39,14 @@ func init() {
 
 func main() {
 	flag.Parse()
+	if len(domain) < 1 {
+		jenkinz.Usage()
+		os.Exit(0)
+	}
+	fmt.Printf(jenkinz.Version)
 	attck := new(Attack)
 	attck.Credentials = credentials
 	jenkinz.Jenkinz.Timeout = time.Duration(timeout) * time.Second
-	if len(domain) < 1 {
-		log.Fatalf("Usage: %s -d http://<jenkins>\n", os.Args[0])
-	}
 	attck.Domain = domain
 	u, err := url.Parse(domain)
 	if err != nil {
@@ -69,7 +72,7 @@ func main() {
 	go func() {
 		defer wg2.Done()
 		for str := range finishedChan {
-			log.Printf("%s\n", str)
+			fmt.Printf("%s\n", str)
 		}
 	}()
 	go func() {
@@ -86,6 +89,7 @@ func main() {
 	wg.Wait()
 	close(finishedChan)
 	wg2.Wait()
+	fmt.Printf("\n-> done. retrieved data for %d builds.\n", numbuilds)
 }
 func (a Attack) GetJobs() {
 	url := fmt.Sprintf("%s/api/json?tree=jobs[name]", a.Domain)
@@ -94,7 +98,7 @@ func (a Attack) GetJobs() {
 		log.Fatal(err)
 	}
 	if resp.StatusCode != 200 {
-		fmt.Printf("ERROR! %s returned %d. Are you sure your credentals are correct?\n", url, resp.StatusCode)
+		log.Fatal(fmt.Errorf("Error: %s returned %d. Check your credentials and/or you have read access\n", url, resp.StatusCode))
 		os.Exit(1)
 	}
 	x := new(jenkinz.Jobs)
@@ -165,6 +169,7 @@ func (a Attack) SaveLogs(buildChan chan *jenkinz.Build, resultChan chan string) 
 				log.Printf("Error: %v", err)
 			}
 		}
-		resultChan <- fmt.Sprintf("Fetched logs & env variables for build %s of %s", build.Id, build.Job)
+		resultChan <- fmt.Sprintf("Fetched data for %s -> build #%s", build.Job, build.Id)
+		numbuilds++
 	}
 }

@@ -1,0 +1,7 @@
+Started by user admin
+Running as SYSTEM
+Building in workspace /var/jenkins_home/workspace/hackerz
+[hackerz] $ /bin/sh -xe /tmp/jenkins5246249918801884167.sh
++ uname -a
+Linux c753b141cd5d 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018 x86_64 GNU/Linux
+Finished: SUCCESS

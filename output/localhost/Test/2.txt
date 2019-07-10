@@ -1,0 +1,18 @@
+Started by user admin
+Running as SYSTEM
+Building in workspace /var/jenkins_home/workspace/Test
+No credentials specified
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/lc/test # timeout=10
+Fetching upstream changes from https://github.com/lc/test
+ > git --version # timeout=10
+ > git fetch --tags --progress https://github.com/lc/test +refs/heads/*:refs/remotes/origin/*
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision f4f08d03ddbbb313b22ce82ce3e31f367f9b856e (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f f4f08d03ddbbb313b22ce82ce3e31f367f9b856e
+Commit message: "test"
+First time build. Skipping changelog.
+Finished: SUCCESS

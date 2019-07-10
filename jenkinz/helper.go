@@ -8,7 +8,8 @@ import (
 )
 
 var (
-	home = HomeDir()
+	Version = "-> jenkinz v1.0\n-> by Corben Leo (@hacker_)\n\n"
+	home    = HomeDir()
 )
 
 func Usage() {
