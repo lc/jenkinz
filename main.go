@@ -89,7 +89,7 @@ func main() {
 	wg.Wait()
 	close(finishedChan)
 	wg2.Wait()
-	fmt.Printf("\n-> done. retrieved data for %d builds.\n", numbuilds)
+	fmt.Printf("\n-> done. saved data for %d builds to output/%s\n", numbuilds, attck.Host)
 }
 func (a Attack) GetJobs() {
 	url := fmt.Sprintf("%s/api/json?tree=jobs[name]", a.Domain)
